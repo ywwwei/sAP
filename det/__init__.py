@@ -184,8 +184,34 @@ def eval_ccf(db, results, class_subset=None, iou_type='bbox'):
             results = pickle.load(open(results, 'rb'))
         else:
             results = json.load(open(results, 'r'))
-
     results = db.loadRes(results)
+    cocoEval = COCOeval(db, results, iou_type)
+    if class_subset is not None:
+        cocoEval.params.catIds = class_subset
+        
+    cocoEval.evaluate()
+    cocoEval.accumulate()
+    cocoEval.summarize()
+
+    return {
+        'eval': cocoEval.eval,
+        'stats': cocoEval.stats,
+    }
+
+def eval_ccf_gt(db, results, class_subset=None, iou_type='bbox'):
+    # ccf means CoCo Format
+
+    if isinstance(results, str):
+        if results.endswith('.pkl'):
+            results = pickle.load(open(results, 'rb'))
+        else:
+            results = json.load(open(results, 'r'))
+    # construct the results: add score=1
+    results = results['annotations']
+    for ann in results:
+        ann['score'] = 1
+    results = db.loadRes(results)
+    
     cocoEval = COCOeval(db, results, iou_type)
     if class_subset is not None:
         cocoEval.params.catIds = class_subset
