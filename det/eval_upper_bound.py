@@ -14,7 +14,7 @@ import pycocotools.mask as maskUtils
 # and the repo's root directory
 import sys; sys.path.insert(0, '..'); sys.path.insert(0, '.')
 from util import mkdir2
-from det import eval_ccf
+from det import eval_ccf_gt, eval_ccf
 
 
 def parse_args():
@@ -36,7 +36,7 @@ def main():
     db = COCO(opts.annot_path)
 
     result_path = opts.annot_path
-    eval_summary = eval_ccf(db, result_path, None, opts.per_class)
+    eval_summary = eval_ccf_gt(db, result_path)
     out_path = join(opts.out_dir, 'eval_summary.pkl')
     
     if opts.overwrite or not isfile(out_path):
