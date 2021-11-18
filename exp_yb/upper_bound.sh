@@ -10,3 +10,4 @@ python det/eval_upper_bound.py \
 	--annot-path "$dataDir/Argoverse-HD/annotations/val.json" \
 	--out-dir "$dataDir/Exp/Argoverse-HD/output/${methodName}_s${scale}/val" \
 	--overwrite \
+	--make-video \
